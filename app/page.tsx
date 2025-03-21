@@ -1,15 +1,16 @@
 "use client"
 
-import { useState, useRef, useCallback, memo } from "react"
-import Image from "next/image"
+import React, { useState, useCallback, useRef, memo } from 'react'
+import Image from 'next/image'
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Loader2, UploadCloud, Upload } from "lucide-react"
 import { ImageWithPlaceholder } from "@/components/ui/image-placeholder"
 import CustomCarousel from "../custom-carousel"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input" 
-import { Label } from "@/components/ui/label"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
-import { Upload } from "lucide-react"
 import initialImages from "@/components/sample/data.json"
 
 const GalleryItem = memo(function GalleryItem({
@@ -62,6 +63,8 @@ export default function Home() {
   const [newImage, setNewImage] = useState({ title: "", description: "" })
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [currentTab, setCurrentTab] = useState("upload")
+  const [isUploading, setIsUploading] = useState(false)
   
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -106,49 +109,107 @@ export default function Home() {
     }
   }, [images, imagePreview, newImage.description, newImage.title])
 
+  const handleFileSelect = useCallback(() => {
+    fileInputRef.current?.click()
+  }, [])
+
+  const handleUpload = useCallback(() => {
+    if (!imageFile || !imagePreview) return
+    
+    setIsUploading(true)
+    
+    // Simulate upload delay
+    setTimeout(() => {
+      // Add the new image to the gallery
+      setImages(prev => [
+        {
+          id: Date.now().toString(),
+          src: imagePreview,
+          title: newImage.title || "Untitled",
+          description: newImage.description || "No description"
+        },
+        ...prev
+      ])
+      
+      // Reset form
+      setImageFile(null)
+      setImagePreview(null)
+      setNewImage({ title: "", description: "" })
+      setIsUploading(false)
+      
+      // Switch to gallery view after upload
+      setCurrentTab("images")
+    }, 1500)
+  }, [imageFile, imagePreview, newImage])
+
   return (
-    <main className="container mx-auto p-4">
-      {/* Upload Section with Logo */}
-      <div className="flex flex-col items-center mb-10">
-        <Image 
-          src="/logo.png" 
-          alt="Company Logo" 
-          width={272}
-          height={92}
-          priority // Logo is important for LCP
-          className="mb-6"
-        />
-        <div 
-          className="w-full max-w-2xl flex items-center border rounded-full px-4 py-2 bg-white shadow cursor-pointer"
-          onClick={handleClickSearchBar}
+    <main className="flex flex-col min-h-screen p-4">
+      {/* Navigation Header */}
+      <div className="w-full flex justify-between items-center mb-4">
+        <Tabs 
+          defaultValue="upload" 
+          value={currentTab}
+          onValueChange={setCurrentTab}
+          className="w-[200px]"
         >
-          <Upload className="h-5 w-5 text-gray-400 mr-2" />
-          <span className="text-gray-500">Click to upload an image...</span>
-          <input 
-            type="file" 
-            accept="image/*" 
-            ref={fileInputRef}
-            className="hidden" 
-            onChange={handleFileChange}
-          />
-        </div>
+          <TabsList>
+            <TabsTrigger value="upload">Upload</TabsTrigger>
+            <TabsTrigger value="images">Images</TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
-
-      <h1 className="text-3xl font-bold mb-8 text-center">Image Gallery</h1>
-
-      {/* Image Grid - using the memoized GalleryItem component with optimization */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {images.map((image, index) => (
-          <GalleryItem 
-            key={image.id}
-            image={image}
-            onClick={() => openCarousel(index)}
-            index={index}
-            totalImages={images.length}
-          />
-        ))}
+      
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col items-center justify-center">
+        {currentTab === "upload" ? (
+          <div className="w-full max-w-xl flex flex-col items-center justify-center">
+            {/* Google-like centered logo */}
+            <div className="mb-8 sm:mb-16">
+              <div className="relative w-52 h-52 sm:w-64 sm:h-64">
+                <Image 
+                  src="/logo.png" 
+                  alt="Ottonomy Logo" 
+                  fill 
+                  priority
+                  className="object-contain"
+                />
+              </div>
+            </div>
+            
+            {/* Google-like search/upload bar */}
+            <div 
+              onClick={handleFileSelect}
+              className="w-full max-w-md flex items-center px-4 py-3 rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-white dark:bg-gray-950"
+            >
+              <UploadCloud className="h-5 w-5 text-gray-500 mr-3" />
+              <span className="text-gray-500">Click to upload an image</span>
+              <input 
+                ref={fileInputRef} 
+                type="file" 
+                accept="image/*" 
+                onChange={handleFileChange} 
+                className="hidden" 
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="w-full">
+            <h2 className="text-2xl font-bold mb-6">Image Gallery</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {images.map((image, index) => (
+                <GalleryItem 
+                  key={image.id} 
+                  image={image} 
+                  onClick={() => openCarousel(index)} 
+                  index={index} 
+                  totalImages={images.length}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
-
+      
       {/* Upload Dialog */}
       <Dialog open={isUploadDialogOpen} onOpenChange={setIsUploadDialogOpen}>
         <DialogContent className="sm:max-w-md">
