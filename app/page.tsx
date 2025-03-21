@@ -160,15 +160,15 @@ export default function Home() {
       </div>
       
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="mt-12 flex flex-col items-center justify-center">
         {currentTab === "upload" ? (
           <div className="w-full max-w-xl flex flex-col items-center justify-center">
             {/* Google-like centered logo */}
-            <div className="mb-8 sm:mb-16">
+            <div className="mb-1 sm:mb-1">
               <div className="relative w-52 h-52 sm:w-64 sm:h-64">
                 <Image 
                   src="/logo.png" 
-                  alt="Ottonomy Logo" 
+                  alt="Otto Logo" 
                   fill 
                   priority
                   className="object-contain"
@@ -179,7 +179,7 @@ export default function Home() {
             {/* Google-like search/upload bar */}
             <div 
               onClick={handleFileSelect}
-              className="w-full max-w-md flex items-center px-4 py-3 rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-white dark:bg-gray-950"
+              className="w-full max-w-md flex items-center px-4 py-5 rounded-full border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-white dark:bg-gray-950"
             >
               <UploadCloud className="h-5 w-5 text-gray-500 mr-3" />
               <span className="text-gray-500">Click to upload an image</span>
