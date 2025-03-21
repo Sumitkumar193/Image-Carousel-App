@@ -5,13 +5,14 @@ import Image from 'next/image'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
-import { Loader2, UploadCloud, Upload } from "lucide-react"
-import { ImageWithPlaceholder } from "@/components/ui/image-placeholder"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { UploadCloud, Upload } from "lucide-react"
 import CustomCarousel from "../custom-carousel"
 import { Textarea } from "@/components/ui/textarea"
 import initialImages from "@/components/sample/data.json"
+import { toast } from "sonner"
+import { Toaster } from "@/components/ui/sonner"
 
 const GalleryItem = memo(function GalleryItem({
   image, 
@@ -106,6 +107,11 @@ export default function Home() {
       setImageFile(null)
       setImagePreview(null)
       setIsUploadDialogOpen(false)
+      
+      // Show success notification
+      toast.success("Image successfully added to gallery", {
+        description: newImage.title
+      })
     }
   }, [images, imagePreview, newImage.description, newImage.title])
 
@@ -137,6 +143,11 @@ export default function Home() {
       setNewImage({ title: "", description: "" })
       setIsUploading(false)
       
+      // Show success notification
+      toast.success("Image successfully uploaded", {
+        description: newImage.title || "Untitled"
+      })
+      
       // Switch to gallery view after upload
       setCurrentTab("images")
     }, 1500)
@@ -144,6 +155,9 @@ export default function Home() {
 
   return (
     <main className="flex flex-col min-h-screen p-4">
+      {/* Add Toaster component to render notifications */}
+      <Toaster />
+      
       {/* Navigation Header */}
       <div className="w-full flex justify-between items-center mb-4">
         <Tabs 
