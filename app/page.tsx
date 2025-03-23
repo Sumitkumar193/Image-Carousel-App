@@ -94,6 +94,7 @@ export default function Home() {
     setImagePreview(null);
     setNewImage({ title: "", description: "" });
     setIsUploading(false);
+    setIsUploadDialogOpen(false);
     
     setCurrentTab("images");
   }, [imageFile, imagePreview, newImage]);
