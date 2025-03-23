@@ -2,9 +2,10 @@ import React, { useMemo } from 'react';
 import Image from 'next/image';
 import { useCarouselLoading } from './carousel-loading-provider';
 
-interface Image {
+
+type Image = {
   id: string;
-  src: string;
+  url: string;
   title: string;
   description: string;
 }
@@ -48,7 +49,7 @@ const CarouselSlide = React.memo(function CarouselSlide({
   );
   
   // Properly handle data URLs
-  const isDataUrl = image.src.startsWith('data:');
+  const isDataUrl = image.url.startsWith('data:');
   
   return (
     <div
@@ -65,7 +66,7 @@ const CarouselSlide = React.memo(function CarouselSlide({
       <div className="relative h-full max-h-[80vh] w-full flex items-center justify-center">
         <div className="relative w-full h-full max-w-[90%] max-h-[80%]">
           <Image
-            src={image.src || "/placeholder.svg"}
+            src={ process.env.NEXT_PUBLIC_BACKEND_URL + image.url || "/placeholder.svg"}
             alt={image.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
@@ -77,7 +78,7 @@ const CarouselSlide = React.memo(function CarouselSlide({
             unoptimized={isDataUrl} // Important for data URLs
             onLoadingComplete={() => markImageLoaded(image.id)}
             onError={() => {
-              console.error(`Failed to load image: ${image.src}`);
+              console.error(`Failed to load image: ${image.url}`);
             }}
           />
         </div>

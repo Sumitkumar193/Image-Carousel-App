@@ -1,5 +1,14 @@
+"use client"
+
 import { memo } from "react";
 import Image from "next/image";
+
+type Image = {
+  id: string;
+  url: string;
+  title: string;
+  description: string;
+}
 
 const GalleryItem = memo(function GalleryItem({
   image,
@@ -7,7 +16,7 @@ const GalleryItem = memo(function GalleryItem({
   index,
   totalImages,
 }: {
-  image: { id: string; src: string; title: string; description: string };
+  image: Image;
   onClick: () => void;
   index: number;
   totalImages: number;
@@ -16,7 +25,7 @@ const GalleryItem = memo(function GalleryItem({
   const isPriority = index < 3;
 
   // Handle data URLs properly
-  const isDataUrl = image.src.startsWith("data:");
+  const isDataUrl = image.url.startsWith("data:");
 
   return (
     <div
@@ -24,7 +33,7 @@ const GalleryItem = memo(function GalleryItem({
       onClick={onClick}
     >
       <Image
-        src={image.src || "/placeholder.svg"}
+        src={`${process.env.NEXT_PUBLIC_BACKEND_URL + image.url}` || "/placeholder.svg"}
         alt={image.title}
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"

@@ -19,9 +19,7 @@ const MasterProvider = ({ children }: { children: ReactNode }) => {
   }
 
   useEffect(() => {
-    // Call fetchCsrfToken immediately when component mounts
-    fetchCsrfToken();
-    
+    fetchCsrfToken();    
     const interval = setInterval(fetchCsrfToken, 1000 * 60 * 15);
 
     WebSocket.init();

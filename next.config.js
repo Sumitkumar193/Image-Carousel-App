@@ -11,7 +11,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**', // Match any hostname for demo purposes - restrict in production
+        hostname: '*.sumitkumar.tech',
       },
     ],
   },
