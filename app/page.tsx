@@ -31,7 +31,7 @@ export default function Home() {
 
   const { data: images, isLoading, isError, refetch } = useQuery({
     queryKey: ["images", page],
-    queryFn: async () => await get("/api/images", { page }),
+    queryFn: async () => await get("/api/images", { page, limit: 128 }),
     enabled: true,
     select: (data) => data.data.images.data || [],
   });
@@ -107,14 +107,12 @@ export default function Home() {
     });
 
     WebSocket.on<ImageInterface>("image:deleted", (data) => {
-      toast.loading("Updating images...");
       queryClient.invalidateQueries({
         queryKey: ["images"],
       });
     });
 
     WebSocket.on<ImageInterface>("image:reorder", (data) => {
-      toast.loading("Updating images...");
       queryClient.invalidateQueries({
         queryKey: ["images"],
       });
