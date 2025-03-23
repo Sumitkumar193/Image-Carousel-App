@@ -27,7 +27,7 @@ const GalleryItem = memo(function GalleryItem({
       onClick={onClick}
     >
       <Image
-        src={`${process.env.NEXT_PUBLIC_BACKEND_URL + image.url}` || "/placeholder.svg"}
+        src={process.env.NEXT_PUBLIC_BACKEND_URL + image.url || "/placeholder.svg"}
         alt={image.title}
         fill
         sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"

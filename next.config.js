@@ -6,12 +6,14 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/webp'],
     minimumCacheTTL: 60,
-    dangerouslyAllowSVG: true, // Enable if you're using SVGs
+    dangerouslyAllowSVG: false,
     contentDispositionType: 'attachment',
     remotePatterns: [
       {
         protocol: 'https',
         hostname: '*.sumitkumar.tech',
+        port: '',
+        pathname: '/uploads/**',  // Use ** to match all subdirectories
       },
     ],
   },
