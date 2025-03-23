@@ -2,24 +2,18 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { toast } from 'sonner';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ImageInterface } from '@/lib/utils';
 import useAxios from '@/hooks/Axios';
 
 interface ReorderPayload {
-  image: Image;
+  image: ImageInterface;
   index: number;
-}
-
-interface Image {
-  id: string;
-  url: string;
-  title: string;
-  description: string;
 }
 
 interface ReorderControlsProps {
   isOpen: boolean;
-  images: Image[];
-  onReorder: (reorderedImages: Image[]) => void;
+  images: ImageInterface[];
+  onReorder: (reorderedImages: ImageInterface[]) => void;
 }
 
 const ReorderControls = React.memo(function ReorderControls({
@@ -71,7 +65,7 @@ const ReorderControls = React.memo(function ReorderControls({
     },
   });
 
-  const handleDragEnd = (image: Image) => {
+  const handleDragEnd = (image: ImageInterface) => {
     if (draggedIndex === null) return;
     mutate({image, index: draggedIndex});
   };

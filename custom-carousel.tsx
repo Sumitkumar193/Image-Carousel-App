@@ -2,25 +2,17 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react"
 import { createPortal } from "react-dom"
-
-// Import our composable components
 import CarouselSlide from "./components/carousel/carousel-slide"
 import CarouselControls from "./components/carousel/carousel-controls"
 import CarouselIndicators from "./components/carousel/carousel-indicators"
 import AddImageDialog from "./components/carousel/add-image-dialog"
 import ReorderControls from "./components/carousel/reorder-controls"
 import { CarouselLoadingProvider } from "./components/carousel/carousel-loading-provider"
-
-interface Image {
-  id: string
-  url: string
-  title: string
-  description: string
-}
+import { ImageInterface } from "./lib/utils"
 
 interface CarouselProps {
-  images: Image[]
-  setImages: React.Dispatch<React.SetStateAction<Image[]>>
+  images: ImageInterface[]
+  setImages: React.Dispatch<React.SetStateAction<ImageInterface[]>>
   initialIndex: number
   onClose: () => void
 }
@@ -189,7 +181,7 @@ export default function CustomCarousel({ images, setImages, initialIndex, onClos
   }, []);
 
   // Handle reordering of images
-  const handleReorder = useCallback((reorderedImages: Image[]) => {
+  const handleReorder = useCallback((reorderedImages: ImageInterface[]) => {
     setImages(reorderedImages);
   }, [setImages]);
 

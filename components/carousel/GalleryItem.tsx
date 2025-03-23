@@ -2,13 +2,7 @@
 
 import { memo } from "react";
 import Image from "next/image";
-
-type Image = {
-  id: string;
-  url: string;
-  title: string;
-  description: string;
-}
+import { ImageInterface } from "@/lib/utils";
 
 const GalleryItem = memo(function GalleryItem({
   image,
@@ -16,7 +10,7 @@ const GalleryItem = memo(function GalleryItem({
   index,
   totalImages,
 }: {
-  image: Image;
+  image: ImageInterface;
   onClick: () => void;
   index: number;
   totalImages: number;

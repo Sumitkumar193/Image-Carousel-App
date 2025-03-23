@@ -1,17 +1,10 @@
 import React, { useMemo } from 'react';
 import Image from 'next/image';
 import { useCarouselLoading } from './carousel-loading-provider';
-
-
-type Image = {
-  id: string;
-  url: string;
-  title: string;
-  description: string;
-}
+import { ImageInterface } from '@/lib/utils';
 
 interface CarouselSlideProps {
-  image: Image;
+  image: ImageInterface;
   isCurrentSlide: boolean;
   isNextSlide: boolean;
   direction: number;

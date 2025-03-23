@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import { Toaster } from "@/components/ui/sonner";
 import GalleryItem from "@/components/carousel/GalleryItem";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "@/hooks/Axios";
+import WebSocket from "@/hooks/Socket";
 
 export default function Home() {
   const { get, post } = useAxios();
@@ -81,9 +82,7 @@ export default function Home() {
     form.append("title", newImage.title);
     form.append("description", newImage.description);
 
-    const response = await post("/api/images", form);
-
-    console.log(response, 'response')
+    await post("/api/images", form);
 
     queryClient.invalidateQueries({
       queryKey: ["images"],
@@ -97,6 +96,35 @@ export default function Home() {
     
     setCurrentTab("images");
   }, [imageFile, imagePreview, newImage]);
+
+  useEffect(() => {
+    WebSocket.on<unknown>("image:created", (data) => {
+      toast.success("New image uploaded!");
+      queryClient.invalidateQueries({
+        queryKey: ["images"],
+      });
+    });
+
+    WebSocket.on<unknown>("image:deleted", (data) => {
+      toast.loading("Updating images...");
+      queryClient.invalidateQueries({
+        queryKey: ["images"],
+      });
+    });
+
+    WebSocket.on<unknown>("image:reorder", (data) => {
+      toast.loading("Updating images...");
+      queryClient.invalidateQueries({
+        queryKey: ["images"],
+      });
+    });
+
+    return () => {
+      WebSocket.off("image:created");
+      WebSocket.off("image:deleted");
+      WebSocket.off("image:reorder");
+    };
+  }, [WebSocket])
 
   return (
     <main className="flex flex-col min-h-screen p-4">

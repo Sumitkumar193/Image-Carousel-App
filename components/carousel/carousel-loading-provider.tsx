@@ -1,13 +1,7 @@
 "use client"
 
 import React, { createContext, useState, useContext, ReactNode, useCallback, useMemo } from 'react';
-
-interface Image {
-  id: string;
-  url: string;
-  title: string;
-  description: string;
-}
+import { ImageInterface } from '@/lib/utils';
 
 interface CarouselLoadingContextType {
   loadedImages: Record<string, boolean>;
@@ -19,7 +13,7 @@ const CarouselLoadingContext = createContext<CarouselLoadingContextType | null>(
 
 interface CarouselLoadingProviderProps {
   children: ReactNode;
-  images: Image[];
+  images: ImageInterface[];
 }
 
 export function CarouselLoadingProvider({ children, images }: CarouselLoadingProviderProps) {
