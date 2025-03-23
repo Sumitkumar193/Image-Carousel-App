@@ -20,19 +20,19 @@ class WebSocket {
     }
 
     static emit<T>(event: string, data?: T):void {
-        WebSocket.instance.emit(event, data);
+        WebSocket.init().emit(event, data);
     }
 
     static on<T>(event: string, callback: (data: T) => void): void {
-        WebSocket.instance.on(event, callback);
+        WebSocket.init().on(event, callback);
     }
 
     static off(event: string): void {
-        WebSocket.instance.off(event);
+        WebSocket.init().off(event);
     }
 
     static close(): void {
-        WebSocket.instance.close();
+        WebSocket.init().close();
     }
 
 }

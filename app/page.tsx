@@ -22,6 +22,7 @@ import GalleryItem from "@/components/carousel/GalleryItem";
 import { useQuery } from "@tanstack/react-query";
 import useAxios from "@/hooks/Axios";
 import WebSocket from "@/hooks/Socket";
+import { ImageInterface } from "@/lib/utils";
 
 export default function Home() {
   const { get, post } = useAxios();
@@ -98,21 +99,21 @@ export default function Home() {
   }, [imageFile, imagePreview, newImage]);
 
   useEffect(() => {
-    WebSocket.on<unknown>("image:created", (data) => {
+    WebSocket.on<ImageInterface>("image:created", (data) => {
       toast.success("New image uploaded!");
       queryClient.invalidateQueries({
         queryKey: ["images"],
       });
     });
 
-    WebSocket.on<unknown>("image:deleted", (data) => {
+    WebSocket.on<ImageInterface>("image:deleted", (data) => {
       toast.loading("Updating images...");
       queryClient.invalidateQueries({
         queryKey: ["images"],
       });
     });
 
-    WebSocket.on<unknown>("image:reorder", (data) => {
+    WebSocket.on<ImageInterface>("image:reorder", (data) => {
       toast.loading("Updating images...");
       queryClient.invalidateQueries({
         queryKey: ["images"],
