@@ -31,7 +31,7 @@ export default function Home() {
     queryKey: ["images", page],
     queryFn: async () => await get("/api/images", { page }),
     enabled: true,
-    select: (data) => data.images.data,
+    select: (data) => data.data.images.data || [],
   });
 
   const [isCarouselOpen, setIsCarouselOpen] = useState(false);
@@ -85,7 +85,9 @@ export default function Home() {
 
     console.log(response, 'response')
 
-    queryClient.invalidateQueries("images");
+    queryClient.invalidateQueries({
+      queryKey: ["images"],
+    });
 
     // Reset form
     setImageFile(null);
@@ -154,6 +156,7 @@ export default function Home() {
           <div className="w-full">
             <h2 className="text-2xl font-bold mb-6">Image Gallery</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {/* @ts-expect-error */}
               {images?.map((image, index) => (
                 <GalleryItem
                   key={image.id}
@@ -222,7 +225,7 @@ export default function Home() {
       {isCarouselOpen && (
         <CustomCarousel
           images={images}
-          setImages={setImages}
+          setImages={(data) => console.log(data)}
           initialIndex={startIndex}
           onClose={() => setIsCarouselOpen(false)}
         />
