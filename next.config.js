@@ -11,7 +11,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '*.sumitkumar.tech',
+        hostname: '*',
         port: '',
         pathname: '/uploads/**',  // Use ** to match all subdirectories
       },
