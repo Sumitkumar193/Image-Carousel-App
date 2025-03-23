@@ -13,7 +13,7 @@ import { CarouselLoadingProvider } from "./components/carousel/carousel-loading-
 
 interface Image {
   id: string
-  src: string
+  url: string
   title: string
   description: string
 }
@@ -163,7 +163,7 @@ export default function CustomCarousel({ images, setImages, initialIndex, onClos
       const newId = (Number.parseInt(images[images.length - 1]?.id || "0") + 1).toString();
       const newImageObj = {
         id: newId,
-        src: imagePreview,
+        url: imagePreview,
         title,
         description,
       };
@@ -204,9 +204,9 @@ export default function CustomCarousel({ images, setImages, initialIndex, onClos
 
     // Preload the images by creating temporary Image objects
     imagesToPreload.forEach(image => {
-      if (image && image.src) {
+      if (image && image.url) {
         const img = new Image();
-        img.src = image.src;
+        img.src = process.env.NEXT_PUBLIC_BACKEND_URL + image.url;
       }
     });
   }, [currentIndex, images]);

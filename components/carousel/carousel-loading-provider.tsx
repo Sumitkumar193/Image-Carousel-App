@@ -4,7 +4,7 @@ import React, { createContext, useState, useContext, ReactNode, useCallback, use
 
 interface Image {
   id: string;
-  src: string;
+  url: string;
   title: string;
   description: string;
 }
