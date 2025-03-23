@@ -100,14 +100,14 @@ export default function Home() {
   }, [imageFile, imagePreview, newImage]);
 
   useEffect(() => {
-    WebSocket.on<ImageInterface>("image:created", (data) => {
+    WebSocket.on<ImageInterface>("image:create", (data) => {
       toast.success("New image uploaded!");
       queryClient.invalidateQueries({
         queryKey: ["images"],
       });
     });
 
-    WebSocket.on<ImageInterface>("image:deleted", (data) => {
+    WebSocket.on<ImageInterface>("image:delete", (data) => {
       queryClient.invalidateQueries({
         queryKey: ["images"],
       });
