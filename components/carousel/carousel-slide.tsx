@@ -21,9 +21,7 @@ const CarouselSlide = React.memo(function CarouselSlide({
   // Get loading state from context
   const { isImageLoaded, markImageLoaded } = useCarouselLoading();
   const imageLoaded = isImageLoaded(image.id);
-  const defaultImage = 'https://ehelperteam.com/wp-content/uploads/2019/09/Broken-images.png';
-
-  const [imgUrl, setImgUrl] = React.useState<string>(process.env.NEXT_PUBLIC_BACKEND_URL + image.url || defaultImage);
+  const defaultImage = 'https://cdn-icons-png.freepik.com/512/11305/11305479.png';
 
   
   // Calculate position classes based on transition state
@@ -63,7 +61,7 @@ const CarouselSlide = React.memo(function CarouselSlide({
       <div className="relative h-full max-h-[80vh] w-full flex items-center justify-center">
         <div className="relative w-full h-full max-w-[90%] max-h-[80%]">
           <Image
-            src={ imgUrl || "/placeholder.svg"}
+            src={ process.env.NEXT_PUBLIC_BACKEND_URL + image.url || "/placeholder.svg"}
             alt={image.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
@@ -74,7 +72,10 @@ const CarouselSlide = React.memo(function CarouselSlide({
             blurDataURL={blurDataURL}
             unoptimized={isDataUrl} // Important for data URLs
             onLoadingComplete={() => markImageLoaded(image.id)}
-            onError={() =>setImgUrl(defaultImage)}
+            onError={(e) => {
+              const target = e.currentTarget as HTMLImageElement;
+              target.src = defaultImage;
+            }}
           />
         </div>
       </div>
